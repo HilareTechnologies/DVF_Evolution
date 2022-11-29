@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Evolution prix achat immobilier</title>
+        <link rel=icon href="/static/favicon.png" type="image/png">
+
+        <link rel="stylesheet" href="/static/lib/spectre/spectre-0.5.9/dist/spectre.min.css">
+        <link rel="stylesheet" href="/static/lib/spectre/spectre-0.5.9/dist/spectre-exp.min.css">
+        <link rel="stylesheet" href="/static/lib/spectre/spectre-0.5.9/dist/spectre-icons.min.css">
+        <link rel="stylesheet" href="/static/css.css">
+
+        <script src='https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js'></script>
+        <script src='https://unpkg.com/mapbox-gl@0.54.0/dist/mapbox-gl.js'></script>
+        <link href='https://unpkg.com/mapbox-gl@0.54.0/dist/mapbox-gl.css' rel='stylesheet' />
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.02.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+    </head>
+    <body>
+        <header class="navbar py-2">
+            <section class="navbar-section">
+              <a href="/static/" class="navbar-brand mr-2">DVF Evol</a>
+              
+            </section>
+            <section class="navbar-center containerSearchNav">
+                <div class="input-group input-inline containerSearchBar">
+                    <input class="form-input" id="barreDeRecherche" name="barreDeRecherche" type="text" placeholder="Recherchez une commune">
+                    <button class="btn btn-primary input-group-btn" id="boutonSearchBar"><i class="icon icon-search"></i></button>
+                  </div>
+                <div id="rechercheAutocomplete" class="panel">
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+              </section>
+            <section class="navbar-section">
+                <a href="#Methode" class="btn btn-link">Données</a>
+                <a href="https://github.com/HilareTechnologies/DVF_Evolution" class="btn btn-link" target="_blank">Code source</a>
+            </section>
+          </header>
+        <section id="containerResultats" class="columns">
+
+            <article id="carteContainer" class="card col-5 col-mx-auto col-sm-10">
+                <div id="mapid">
+                    
+                </div>
+            </article>
+            <article id="graphiqueContainer" class="card col-7 col-mx-auto col-sm-10">
+                <div id="rplcm" class="">
+                    <div id="chargement">
+                        <span><b class="text-primary">Calcul en cours</b></span><br/>
+                        <span class="loadert"></span>
+                    </div>
+                    <div id="presentation">
+                        <h1>Evolution des prix de l'immobilier</h1>
+                        <h2>
+                            Présentation
+                        </h2>
+                        <p>DVF Evolution présente les courbes d'évolution des prix de l'immobilier par section (sous-découpage d'une commune), evolution relative à l'antériorité accessible la plus poussée</p>
+                        <p>
+                            Cliquez sur un département puis une commune pour afficher l'évolution des prix immobiliers de chaque <attr>section</attr> ou cherchez, à l'aide de la barre de recherche, la commune de votre choix.
+                        </p>
+                        <p>Une fois les graphiques affichés, vous pouvez, en cliquant sur les sections de la carte, mettre en surbrillance le graphique associé.</p>
+                        <p>
+                            <a class="btn btn-lg p-centered mt-2" href="#Methode">Accèdez à notre méthodologie</a>
+                        </p>
+                    </div>
+                    <div id="noResult">
+                        <p>
+                            Aucune donnée accessible pour la recherche : <span id="noResultTC"></span> <span id="noResultCode"></span>
+                        </p>
+                        <p>
+                            <a class="btn btn-lg p-centered mt-2" href="#Methode">Accèdez à notre méthodologie</a>
+                        </p>
+                    </div>
+                </div>
+                <iframe id="iframeGraphiques"
+                    title="Graphiques evolution immobilier"
+                    width="100%"
+                    height="100%"
+                    src="">
+                </iframe>
+                
+            </article>
+            
+        </section>
+        <aside id="containerInfo">
+
+        </aside>
+        <div class="modal" id="Methode"><a class="modal-overlay" href="#modals" aria-label="Close"></a>
+            <div class="modal-container" role="document">
+                <div class="modal-header"><a class="btn btn-clear float-right" href="#modals" aria-label="Close"></a>
+                    <div class="modal-title h5"><h2>Données & Méthodologie</h2></div>
+                </div>
+                <div class="modal-body">
+                    <div class="content">
+                        <h3>Les données calculées</h3>
+                        <p><a class="btn" href="#MettreLienVersUnDepotDataGouvFr">Données disponible ici</a></p>
+                        <h3>Données d'origine</h3>
+                        <p>La données sont issues de la Demandes de Valeurs Foncières (DVF) produite par le Ministère de l'Économie, des Finances et de la Souveraineté industrielle et numérique. <a href="https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/">Lien données dvf data.gouv.fr</a> </p>
+                        <p>Une antériorité jusqu'à 2014 a été récupérée (puis supprimée pour se conformer aux modalités légales).</p>
+                        <h3>Méthodologie</h3>
+                        <p>Les données ont été agrégées au niveau de la mutation, pour chaque section, pour chaque trimestre, par type de locaux, type de terrain, nombre de pièces principales, présence de dépendance; puis discrétisées sur la surface du terrain et du bati.</p>
+                        <p>Pour chaque trimestre le facteur d'évolution a été calculé par rapport au trimestre le plus anterieur. Pour chaque classe une pondération de moitié a été appliquée avec la moyenne des facteurs des mutations exactes (mutations du même bien, détecté par [parcelle, type bati, surface bati, type terrain, surface terrain, avec une progression du prix limitée à plus ou moins 5% par trimestre])</p>
+                        <h3>Site web</h3>
+                        <p>Le front, notamment la carte, reprend le code de l'application <a href="app.dvf.etalab.gouv.fr/">app.dvf.etalab.gouv.fr/</a>.</p>
+                        <p>La complétion automatique de la recherche de communes utilise l'API de geo.api.gouv.fr <a href="https://geo.api.gouv.fr/decoupage-administratif/communes#communes-list">https://geo.api.gouv.fr/decoupage-administratif/communes</a> maintenue par Etalab.</p>
+                        <p>L'ensemble du code est disponible <a href="https://github.com/HilareTechnologies/DVF_Evolution">ici</a></p>
+                        <p>Développé par notre partenaire<br><a href="https://hilare.fr" target="_blank">
+                            <img alt="Hilare Technologies" src="/static/vignette_hilare.png" style="height:60px;">
+                        </a></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <a class="btn btn-link" href="#modals">Fermer</a>
+                </div>
+            </div>
+        </div>
+        <a id="vignette_devpar" href="https://hilare.fr" target="_blank"><img alt="Hilare Technologies" src="/static/vignette_hilare.png" alt="développé par Hilare Technologies" ></a>
+        <script src="/static/marco.js"></script>
+        <script src="/static/donneesgeo/departements-100m.js"></script>
+        <script src="/static/donneesgeo/communes-mapping.js"></script>
+        <script src="/static/donneesgeo/arrondissements_municipaux-20180711.js"></script>
+        <script src="/static/data.js"></script>
+        <script src="/static/js.js"></script>
+        
+    </body>
+</html>

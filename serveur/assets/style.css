@@ -1,0 +1,10 @@
+#lesgraphes{
+    /* background-color: red; */
+}
+
+.graphSections{
+    display: inline-block;
+}
+#nbgraphes{
+    display:none;
+}
