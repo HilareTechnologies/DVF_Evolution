@@ -18,7 +18,7 @@ Dans un environnement s'il y a lieu <br/>
 
 Récupérer ou générer le fichier d'évolution des prix fonciers, 
 - soit par les scripts de génération [#Traitement de données]
-- soit sur <a href="">le repo data.gouv.fr</a>
+- soit sur <a href="https://www.data.gouv.fr/fr/datasets/evolution-des-prix-de-du-foncier-en-france/">le repo data.gouv.fr</a>
 
 Modifier en conséquence la constante PATH_DATA du fichier ./serveur/dvf_evol_dashboard.py
 
